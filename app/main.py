@@ -6,7 +6,7 @@ import uvicorn
 import os
 import shutil
 import io
-from model import CLIPHandler 
+from model import CLIPHandler # Import the CLIP handler
 
 app = FastAPI()
 
