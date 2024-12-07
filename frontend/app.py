@@ -2,9 +2,12 @@ import streamlit as st
 import requests
 from PIL import Image
 from io import BytesIO
-
+import os
 # Backend URL
-backend_url = "http://localhost:8000"
+from dotenv import load_dotenv
+
+load_dotenv()
+backend_url = os.environ.get("VAST_AI_BACKEND_URL")
 
 # Streamlit App Title
 st.title("GDG AI Image and Text Processor")

@@ -39,26 +39,41 @@ async def text_to_image(request: TextRequest):
         raise HTTPException(status_code=500, detail="An internal server error occurred.")
 
 
+
+# Predefined labels for matching
+labels = ["a cat", "a dog", "a car", "a person", "a tree", "a house"]
+
 @router.post("/image-to-text")
 async def image_to_text(file: UploadFile = File(...)):
     """
     Generate a text description of an image using CLIP.
     """
     try:
-        # Load the uploaded image
+        # Check if a file is uploaded
         if not file:
             raise HTTPException(status_code=400, detail="No file uploaded.")
 
+        # Load the image
         image = Image.open(BytesIO(await file.read())).convert("RGB")
 
-        # Preprocess the image using CLIP
+        # Preprocess the image
         inputs = clip_processor(images=image, return_tensors="pt", padding=True)
 
-        # Generate text embeddings (you need predefined labels for matching)
+        # Get image features
         image_features = clip_model.get_image_features(**inputs)
+        image_features = image_features / image_features.norm(p=2, dim=-1, keepdim=True)  # Normalize features
 
-        # Placeholder for label matching logic
-        description = "Generated description placeholder (implement label comparison here)."
+        # Preprocess labels
+        text_inputs = clip_processor(text=labels, return_tensors="pt", padding=True)
+        text_features = clip_model.get_text_features(**text_inputs)
+        text_features = text_features / text_features.norm(p=2, dim=-1, keepdim=True)  # Normalize features
+
+        # Compute similarity
+        similarity = torch.matmul(image_features, text_features.T)
+
+        # Find the best matching label
+        best_match_idx = similarity.argmax().item()
+        description = labels[best_match_idx]
 
         logger.info("Image description generated successfully.")
         return JSONResponse(content={"description": description})

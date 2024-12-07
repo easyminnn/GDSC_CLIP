@@ -15,8 +15,9 @@ COPY /app/requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r /app/requirements.txt
 
+RUN python -c "from transformers import CLIPProcessor, CLIPModel; CLIPModel.from_pretrained('openai/clip-vit-base-patch32'); CLIPProcessor.from_pretrained('openai/clip-vit-base-patch32')"
 # Copy the application code into the container
-COPY . /app
+COPY app/ .
 
 # Expose the application port
 EXPOSE 8000

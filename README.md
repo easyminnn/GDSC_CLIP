@@ -40,25 +40,24 @@ Ensure you have the following installed:
 
 3. **Access the application**:
 
-- (1) Type this command to take trials locally on `app` dir (backend): 
-   ```bash
-   uvicorn main:app --reload
-   ```
-- (2) Type this command to take trials locally on `frontend` dir (frontend):
-   ```bash
-   streamlit run app.py
-   ```
+- (1) Type this command to take trials locally on `app` dir (backend):
+  ```bash
+  uvicorn main:app --reload
+  ```
+- (2) Type this command to take trials locally (frontend):
+
+  ```bash
+  streamlit run frontend/app.py
+  ```
 
 - Backend: Visit http://localhost:8000 for the FastAPI documentation (Swagger UI).
 - Frontend: Visit http://localhost:8501 for the Streamlit application.
 
+4. **(For using Docker)**: To use Docker, build Image
 
-
-4. **Stop the application**: Press `Ctrl+C`` in the terminal or use the following command to stop and remove containers:
-
-   ```bash
-   docker-compose down
-   ```
+   (1) You can use Image `easyminnn/clip-diffusion-fastapi` on Dockerhub.
+   (2) Check the IP from VAST.AI and process backend : `http://<VAST_AI_INSTANCE_IP>:8000`
+   (3) process frontend : `streamlit run frontend/app.py`
 
 ### Project Structure
 
@@ -76,3 +75,5 @@ Ensure you have the following installed:
 ├── docker-compose.yml      # Docker Compose configuration
 └── README.md               # Project documentation
 ```
+
+##### 시험끝나고 더 발전시켜볼게용..
