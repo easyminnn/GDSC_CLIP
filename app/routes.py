@@ -69,3 +69,28 @@ async def image_to_text(file: UploadFile = File(...)):
     except Exception as e:
         logger.error(f"Unexpected error: {e}")
         raise HTTPException(status_code=500, detail="An internal server error occurred.")
+
+
+@router.get("/health")
+async def health_check():
+    """
+    Health check endpoint to verify server status.
+    """
+    try:
+        # Perform basic checks
+        logger.info("Performing health check...")
+
+        # Optional: Check if models are loaded properly
+        if not pipeline or not clip_model or not clip_processor:
+            raise HTTPException(status_code=500, detail="Model initialization failed.")
+
+        # Optional: Check device availability
+        if device not in ["cuda", "cpu"]:
+            raise HTTPException(status_code=500, detail="Invalid device configuration.")
+
+        logger.info("Health check passed.")
+        return JSONResponse(content={"status": "Healthy"})
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+        raise HTTPException(status_code=500, detail="Server health check failed.")
+
