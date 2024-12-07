@@ -26,22 +26,33 @@ Ensure you have the following installed:
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/your-username/clip-fastapi-streamlit.git
-   cd clip-fastapi-streamlit
-
+   git clone https://github.com/easyminnn/GDSC_CLIP.git
+   cd GDSC_CLIP
    ```
 
-2. **Build and run the Docker containers**:
+2. **Conda Environment setting**:
 
    ```bash
-   docker-compose up --build
-
+   conda create -n gdg_clip python=3.8
+   conda activate gdg_clip
+   pip install -r requirements.txt
    ```
 
 3. **Access the application**:
 
+- (1) Type this command to take trials locally on `app` dir (backend): 
+   ```bash
+   uvicorn main:app --reload
+   ```
+- (2) Type this command to take trials locally on `frontend` dir (frontend):
+   ```bash
+   streamlit run app.py
+   ```
+
 - Backend: Visit http://localhost:8000 for the FastAPI documentation (Swagger UI).
 - Frontend: Visit http://localhost:8501 for the Streamlit application.
+
+
 
 4. **Stop the application**: Press `Ctrl+C`` in the terminal or use the following command to stop and remove containers:
 

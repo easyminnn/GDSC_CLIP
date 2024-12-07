@@ -3,22 +3,29 @@ import requests
 from PIL import Image
 from io import BytesIO
 
+# Backend URL
 backend_url = "http://localhost:8000"
 
-st.title("GDSC_AI Image and Text Processor")
+# Streamlit App Title
+st.title("GDG AI Image and Text Processor")
 
-# Sidebar for navigation
+# Sidebar for Navigation
 page = st.sidebar.selectbox("Choose a page:", ["Text-to-Image", "Image-to-Text", "Health Check"])
 
 if page == "Text-to-Image":
     st.header("Text to Image")
     text_input = st.text_input("Enter a text prompt:")
     if st.button("Generate Image"):
-        response = requests.post(f"{backend_url}/text-to-image", json={"text": text_input})
-        if response.status_code == 200:
-            st.success(response.json()["message"])
+        if text_input.strip():
+            response = requests.post(f"{backend_url}/text-to-image", json={"text": text_input})
+            if response.status_code == 200:
+                # Load and display the image
+                image = Image.open(BytesIO(response.content))
+                st.image(image, caption="Generated Image", use_column_width=True)
+            else:
+                st.error(f"Image generation failed: {response.status_code} - {response.text}")
         else:
-            st.error("이미지 로드에 실패했어요.")
+            st.error("Please enter a valid text prompt.")
 
 elif page == "Image-to-Text":
     st.header("Image to Text")
@@ -28,16 +35,18 @@ elif page == "Image-to-Text":
             files = {"file": uploaded_file.getvalue()}
             response = requests.post(f"{backend_url}/image-to-text", files=files)
             if response.status_code == 200:
-                st.success(response.json()["message"])
+                # Display the description
+                description = response.json().get("description", "No description returned.")
+                st.success(f"Description: {description}")
             else:
-                st.error("Failed to process image.")
+                st.error(f"Image processing failed: {response.status_code} - {response.text}")
         else:
-            st.error("Please upload an image.")
+            st.error("Please upload an image to process.")
 
 elif page == "Health Check":
     st.header("Server Health Check")
     response = requests.get(f"{backend_url}/health")
     if response.status_code == 200:
-        st.success(f"Server Status: {response.json()['status']}")
+        st.success(f"Server Status: {response.json().get('status', 'Unknown')}")
     else:
-        st.error("Server is not healthy.")
+        st.error(f"Server health check failed: {response.status_code} - {response.text}")

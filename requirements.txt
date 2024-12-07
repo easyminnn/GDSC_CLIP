@@ -3,5 +3,9 @@ uvicorn
 torch
 transformers
 python-dotenv
-streamlit>=1.23.0
-altair==4.2.2
+diffusers
+streamlit
+altair
+accelerate
+safetensors
+python-multipart
