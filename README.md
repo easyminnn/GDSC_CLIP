@@ -56,7 +56,9 @@ Ensure you have the following installed:
 4. **(For using Docker)**: To use Docker, build Image
 
    (1) You can use Image `easyminnn/clip-diffusion-fastapi` on Dockerhub.
+   
    (2) Check the IP from VAST.AI and process backend : `http://<VAST_AI_INSTANCE_IP>:8000`
+   
    (3) process frontend : `streamlit run frontend/app.py`
 
 ### Project Structure
